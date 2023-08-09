@@ -1,8 +1,9 @@
 package com.example.efe.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Student {
@@ -13,13 +14,31 @@ public class Student {
     private String studentLastname;
     private String studentEmail;
 
+
+    @OneToMany(targetEntity = EnrolledCourse.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_fk", referencedColumnName = "studentId")
+    private List<EnrolledCourse> enrolledCourses = new ArrayList<>();
+
+    /*
+    @OneToMany(targetEntity = EnrolledCourse.class, cascade = CascadeType.ALL)
+    private List<EnrolledCourse> enrolledCourses;
+     */
+
     public Student(int id, String firstname, String lastname, String email) {
         this.studentId = id;
         this.studentFirstname = firstname;
         this.studentLastname = lastname;
         this.studentEmail = email;
+
     }
 
+    public Student(int studentId, String studentFirstname, String studentLastname, String studentEmail, List<EnrolledCourse> enrolledCourses) {
+        this.studentId = studentId;
+        this.studentFirstname = studentFirstname;
+        this.studentLastname = studentLastname;
+        this.studentEmail = studentEmail;
+        this.enrolledCourses = enrolledCourses;
+    }
 
     public Student() {
         super();
@@ -55,5 +74,13 @@ public class Student {
 
     public void setStudentEmail(String email) {
         this.studentEmail = email;
+    }
+
+    public List<EnrolledCourse> getEnrolledCourses() {
+        return enrolledCourses;
+    }
+
+    public void setEnrolledCourses(List<EnrolledCourse> enrolledCourses) {
+        this.enrolledCourses = enrolledCourses;
     }
 }

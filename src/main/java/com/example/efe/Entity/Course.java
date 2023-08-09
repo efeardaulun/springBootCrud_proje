@@ -3,6 +3,9 @@ package com.example.efe.Entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Table(name = "Course")
 @Entity
 public class Course {
@@ -14,6 +17,14 @@ public class Course {
     private String courseName;
     private boolean isMathematical;
     private boolean isVerbal;
+    /*
+     @OneToMany(targetEntity = EnrolledCourse.class, cascade = CascadeType.ALL)
+     private List<EnrolledCourse> enrolledCourseList;
+     */
+
+    @OneToMany(targetEntity = EnrolledCourse.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_fk", referencedColumnName = "courseId")
+    private List<EnrolledCourse> enrolledCourseList = new ArrayList<>();
 
     public Course(int courseId, String courseName, boolean isMathematical, boolean isVerbal) {
         this.courseId = courseId;
@@ -57,5 +68,13 @@ public class Course {
 
     public void setVerbal(boolean verbal) {
         isVerbal = verbal;
+    }
+
+    public List<EnrolledCourse> getEnrolledCourseList() {
+        return enrolledCourseList;
+    }
+
+    public void setEnrolledCourseList(List<EnrolledCourse> enrolledCourseList) {
+        this.enrolledCourseList = enrolledCourseList;
     }
 }

@@ -28,7 +28,7 @@ public class StudentController {
 
     }
     @PostMapping("/save")
-    public Student updateStudent(@RequestBody Student studentId){
+    public Student saveStudent(@RequestBody Student studentId){
         return studentRepository.save(studentId);
     }
 
