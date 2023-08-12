@@ -39,6 +39,7 @@ public class StudentController {
         updatedUser.setStudentFirstname(user.getStudentFirstname());
         updatedUser.setStudentLastname(user.getStudentLastname());
         updatedUser.setStudentEmail(user.getStudentEmail());
+        updatedUser.setCourses(user.getCourses());
         return studentRepository.save(updatedUser);
     }
 

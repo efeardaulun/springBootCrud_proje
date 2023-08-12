@@ -3,13 +3,11 @@ package com.example.efe.Entity;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Table(name = "Course")
 @Entity
 public class Course {
-    //id,isim,is_sayısal mı,is_mathemetical,instructorid
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,14 +15,15 @@ public class Course {
     private String courseName;
     private boolean isMathematical;
     private boolean isVerbal;
-    /*
-     @OneToMany(targetEntity = EnrolledCourse.class, cascade = CascadeType.ALL)
-     private List<EnrolledCourse> enrolledCourseList;
-     */
 
-    @OneToMany(targetEntity = EnrolledCourse.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "course_fk", referencedColumnName = "courseId")
-    private List<EnrolledCourse> enrolledCourseList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "instructorId")
+    private Instructor instructor;
+
+
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
+    private Set<Student> students;
+
 
     public Course(int courseId, String courseName, boolean isMathematical, boolean isVerbal) {
         this.courseId = courseId;
@@ -58,23 +57,16 @@ public class Course {
         return isMathematical;
     }
 
-    public void setMathematical(boolean mathematical) {
-        isMathematical = mathematical;
+    public void setIsMathematical(boolean isMathematical) {
+        this.isMathematical = isMathematical;
     }
 
     public boolean isVerbal() {
         return isVerbal;
     }
 
-    public void setVerbal(boolean verbal) {
-        isVerbal = verbal;
+    public void setIsVerbal(boolean isVerbal) {
+        this.isVerbal = isVerbal;
     }
 
-    public List<EnrolledCourse> getEnrolledCourseList() {
-        return enrolledCourseList;
-    }
-
-    public void setEnrolledCourseList(List<EnrolledCourse> enrolledCourseList) {
-        this.enrolledCourseList = enrolledCourseList;
-    }
 }

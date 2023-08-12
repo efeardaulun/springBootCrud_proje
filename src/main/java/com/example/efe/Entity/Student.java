@@ -1,9 +1,11 @@
 package com.example.efe.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Student {
@@ -14,15 +16,25 @@ public class Student {
     private String studentLastname;
     private String studentEmail;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "enrolledCourse",
+    joinColumns = {
+            @JoinColumn(name = "student_id",referencedColumnName = "studentId")
+    },
+    inverseJoinColumns = {
+            @JoinColumn(name = "course_id",referencedColumnName = "courseId")
+    }
+    )
+    private Set<Course> courses;
 
-    @OneToMany(targetEntity = EnrolledCourse.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "student_fk", referencedColumnName = "studentId")
-    private List<EnrolledCourse> enrolledCourses = new ArrayList<>();
 
-    /*
-    @OneToMany(targetEntity = EnrolledCourse.class, cascade = CascadeType.ALL)
-    private List<EnrolledCourse> enrolledCourses;
-     */
+    public Student(int studentId, String studentFirstname, String studentLastname, String studentEmail, Set<Course> courses) {
+        this.studentId = studentId;
+        this.studentFirstname = studentFirstname;
+        this.studentLastname = studentLastname;
+        this.studentEmail = studentEmail;
+        this.courses = courses;
+    }
 
     public Student(int id, String firstname, String lastname, String email) {
         this.studentId = id;
@@ -30,14 +42,6 @@ public class Student {
         this.studentLastname = lastname;
         this.studentEmail = email;
 
-    }
-
-    public Student(int studentId, String studentFirstname, String studentLastname, String studentEmail, List<EnrolledCourse> enrolledCourses) {
-        this.studentId = studentId;
-        this.studentFirstname = studentFirstname;
-        this.studentLastname = studentLastname;
-        this.studentEmail = studentEmail;
-        this.enrolledCourses = enrolledCourses;
     }
 
     public Student() {
@@ -76,11 +80,11 @@ public class Student {
         this.studentEmail = email;
     }
 
-    public List<EnrolledCourse> getEnrolledCourses() {
-        return enrolledCourses;
+    public Set<Course> getCourses() {
+        return courses;
     }
 
-    public void setEnrolledCourses(List<EnrolledCourse> enrolledCourses) {
-        this.enrolledCourses = enrolledCourses;
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 }

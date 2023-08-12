@@ -17,7 +17,7 @@ public class Instructor {
     private  String instructorSurname;
 
     @OneToMany(targetEntity = Course.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "instructorCourse_fk", referencedColumnName = "instructorId")
+    @JoinColumn(name = "instructorId", referencedColumnName = "instructorId")
     private List<Course> courseList = new ArrayList<>();
 
     public Instructor(int instructorId, String instructorName, String instructorSurname, List<Course> courseList) {

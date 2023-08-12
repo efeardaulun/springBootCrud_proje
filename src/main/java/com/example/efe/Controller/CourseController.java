@@ -1,7 +1,6 @@
 package com.example.efe.Controller;
 
 import com.example.efe.Entity.Course;
-import com.example.efe.Entity.Instructor;
 import com.example.efe.Excepcition.ResourceNotFoundException;
 import com.example.efe.Repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +36,8 @@ public class CourseController {
         Course updatedCourse = courseRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("course not found by id"));
         updatedCourse.setCourseName(course.getCourseName());
-        updatedCourse.setMathematical(course.isMathematical());
-        updatedCourse.setVerbal(course.isVerbal());
+        updatedCourse.setIsMathematical(course.isMathematical());
+        updatedCourse.setIsVerbal(course.isVerbal());
         return courseRepository.save(updatedCourse);
     }
 
