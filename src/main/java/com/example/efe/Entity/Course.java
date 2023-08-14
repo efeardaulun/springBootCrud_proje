@@ -14,22 +14,47 @@ public class Course {
     private int courseId;
     private String courseName;
     private boolean isMathematical;
-    private boolean isVerbal;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "instructorId")
+    @JoinColumn(name = "instructorId", referencedColumnName = "id")
     private Instructor instructor;
+
 
 
     @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
     private Set<Student> students;
 
 
-    public Course(int courseId, String courseName, boolean isMathematical, boolean isVerbal) {
+    public Course(int courseId, String courseName, boolean isMathematical, Instructor instructor, Set<Student> students) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.isMathematical = isMathematical;
-        this.isVerbal = isVerbal;
+        this.instructor = instructor;
+        this.students = students;
+    }
+
+    public Instructor getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
+    }
+
+    public Course(int courseId, String courseName, boolean isMathematical, Set<Student> students) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.isMathematical = isMathematical;
+
+        this.students = students;
+    }
+
+    public Course(int courseId, String courseName, boolean isMathematical) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.isMathematical = isMathematical;
+
     }
 
     public Course() {
@@ -61,12 +86,14 @@ public class Course {
         this.isMathematical = isMathematical;
     }
 
-    public boolean isVerbal() {
-        return isVerbal;
+
+    public Set<Student> getStudents() {
+        return students;
     }
 
-    public void setIsVerbal(boolean isVerbal) {
-        this.isVerbal = isVerbal;
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
+
 
 }

@@ -25,7 +25,7 @@ public class InstructorController {
     }
 
     @GetMapping("/{instructorId}")
-    public Instructor findById(@PathVariable (value = "instructorId") int id){
+    public Instructor findById(@PathVariable (value = "instructorId") Long id){
         return instructorRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("instructor not found by user id"));
     }
@@ -36,17 +36,17 @@ public class InstructorController {
     }
 
     @PutMapping("/update/{instructorId}")
-    public Instructor updateInstructor(@RequestBody Instructor instructor, @PathVariable(value = "instructorId") int id){
+    public Instructor updateInstructor(@RequestBody Instructor instructor, @PathVariable(value = "instructorId") Long id){
         Instructor updatedInstructor = instructorRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("instructor not found by id"));
         updatedInstructor.setInstructorName(instructor.getInstructorName());
         updatedInstructor.setInstructorSurname(instructor.getInstructorSurname());
-        updatedInstructor.setCourseList(instructor.getCourseList());
+       // updatedInstructor.setCourseList(instructor.getCourseList());
         return instructorRepository.save(updatedInstructor);
     }
 
     @DeleteMapping("/delete/{instructorId}")
-    public String deleteInstructor(@PathVariable(value = "instructorId") int id){
+    public String deleteInstructor(@PathVariable(value = "instructorId") Long id){
         Instructor deletedInstructor = instructorRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("instructor not found by id"));
         instructorRepository.delete(deletedInstructor);

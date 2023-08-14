@@ -2,9 +2,6 @@ package com.example.efe.Entity;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "Instructor")
 public class Instructor {
@@ -12,31 +9,45 @@ public class Instructor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int instructorId;
+    private Long id;
     private String instructorName;
     private  String instructorSurname;
 
+
+    /*
     @OneToMany(targetEntity = Course.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "instructorId", referencedColumnName = "instructorId")
+    @NonNull
     private List<Course> courseList = new ArrayList<>();
 
-    public Instructor(int instructorId, String instructorName, String instructorSurname, List<Course> courseList) {
-        this.instructorId = instructorId;
+     */
+
+    /*
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Course> courseList = new ArrayList<>();
+
+     */
+
+    public Instructor(String instructorName, String instructorSurname) {
         this.instructorName = instructorName;
         this.instructorSurname = instructorSurname;
-        this.courseList = courseList;
+    }
+
+    public Instructor(Long instructorId, String instructorName, String instructorSurname) {
+        this.id = instructorId;
+        this.instructorName = instructorName;
+        this.instructorSurname = instructorSurname;
     }
 
     public Instructor() {
         super();
     }
 
-    public int getInstructorId() {
-        return instructorId;
+    public Long getId() {
+        return id;
     }
 
-    public void setInstructorId(int instructorId) {
-        this.instructorId = instructorId;
+    public void setId(Long instructorId) {
+        this.id = instructorId;
     }
 
     public String getInstructorName() {
@@ -55,11 +66,4 @@ public class Instructor {
         this.instructorSurname = instructorSurname;
     }
 
-    public List<Course> getCourseList() {
-        return courseList;
-    }
-
-    public void setCourseList(List<Course> courseList) {
-        this.courseList = courseList;
-    }
 }
