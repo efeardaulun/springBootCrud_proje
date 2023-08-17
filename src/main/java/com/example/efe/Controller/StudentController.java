@@ -45,29 +45,34 @@ public class StudentController {
                     student.getCourses().add(course);
                 }
             }
+            Student savedStudent = studentRepository.save(student);
+            return new Response("created success", HttpStatus.CREATED.value());
         }
-        Student savedStudent = studentRepository.save(student);
-        return new Response("created success", HttpStatus.CREATED.value());
+        else
+            return new Response("only enroll already existing course", HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
 
 
     @PutMapping("/update/{studentId}")
-    public Student updateStudent(@RequestBody Student user, @PathVariable(value = "studentId") Long studentId){
+    @ResponseStatus(HttpStatus.OK)
+    public Response updateStudent(@RequestBody Student user, @PathVariable(value = "studentId") Long studentId){
         Student updatedUser = studentRepository.findById(studentId)
                 .orElseThrow(()-> new ResourceNotFoundException("user not found by id"));
         updatedUser.setStudentFirstname(user.getStudentFirstname());
         updatedUser.setStudentLastname(user.getStudentLastname());
         updatedUser.setStudentEmail(user.getStudentEmail());
         updatedUser.setCourses(user.getCourses());
-        return studentRepository.save(updatedUser);
+        studentRepository.save(updatedUser);
+        return new Response("user updated",HttpStatus.OK.value());
     }
 
     @DeleteMapping("/delete/{studentId}")
-    public String deletedStudent(@PathVariable(value = "studentId") Long studentId){
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Response deletedStudent(@PathVariable(value = "studentId") Long studentId){
         Student deletedUser = studentRepository.findById(studentId)
                 .orElseThrow(()-> new ResourceNotFoundException("user not found by id"));
         studentRepository.delete(deletedUser);
-        return "Users deleted";
+        return new Response("user deletede", HttpStatus.NO_CONTENT.value());
     }
 }

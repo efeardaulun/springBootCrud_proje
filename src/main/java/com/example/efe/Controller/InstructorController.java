@@ -5,7 +5,9 @@ import com.example.efe.Entity.Student;
 import com.example.efe.Excepcition.ResourceNotFoundException;
 import com.example.efe.Repository.CourseRepository;
 import com.example.efe.Repository.InstructorRepository;
+import com.example.efe.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,26 +33,30 @@ public class InstructorController {
     }
 
     @PostMapping("/save")
-    public Instructor saveInstructor (@RequestBody Instructor instructor){
-        return instructorRepository.save(instructor);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response saveInstructor (@RequestBody Instructor instructor){
+        instructorRepository.save(instructor);
+        return new Response("instructor saved",HttpStatus.OK.value());
     }
 
     @PutMapping("/update/{instructorId}")
-    public Instructor updateInstructor(@RequestBody Instructor instructor, @PathVariable(value = "instructorId") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    public Response updateInstructor(@RequestBody Instructor instructor, @PathVariable(value = "instructorId") Long id){
         Instructor updatedInstructor = instructorRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("instructor not found by id"));
         updatedInstructor.setInstructorName(instructor.getInstructorName());
         updatedInstructor.setInstructorSurname(instructor.getInstructorSurname());
-       // updatedInstructor.setCourseList(instructor.getCourseList());
-        return instructorRepository.save(updatedInstructor);
+        instructorRepository.save(updatedInstructor);
+        return new Response("instrucor updated", HttpStatus.OK.value());
     }
 
     @DeleteMapping("/delete/{instructorId}")
-    public String deleteInstructor(@PathVariable(value = "instructorId") Long id){
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Response deleteInstructor(@PathVariable(value = "instructorId") Long id){
         Instructor deletedInstructor = instructorRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("instructor not found by id"));
         instructorRepository.delete(deletedInstructor);
-        return "Instructor Deletede";
+        return new Response("Instructor Deleted",HttpStatus.NO_CONTENT.value());
     }
 
 }

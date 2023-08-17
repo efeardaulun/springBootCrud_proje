@@ -55,6 +55,7 @@ public class CourseController {
                 .orElseThrow(()-> new ResourceNotFoundException("course not found by id"));
         updatedCourse.setCourseName(course.getCourseName());
         updatedCourse.setIsMathematical(course.isMathematical());
+        updatedCourse.setInstructor(instructorRepository.findById(course.getInstructor().getId()).orElse(null));
         return courseRepository.save(updatedCourse);
     }
 
