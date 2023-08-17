@@ -11,50 +11,45 @@ public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int courseId;
+    private Long id;
     private String courseName;
     private boolean isMathematical;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructorId", referencedColumnName = "id")
     private Instructor instructor;
 
-
-
     @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
     private Set<Student> students;
 
 
-    public Course(int courseId, String courseName, boolean isMathematical, Instructor instructor, Set<Student> students) {
-        this.courseId = courseId;
+    public Course(Long courseId, String courseName, boolean isMathematical, Set<Student> students) {
+        this.id = courseId;
+        this.courseName = courseName;
+        this.isMathematical = isMathematical;
+        this.students = students;
+    }
+
+    public Course(Long courseId, String courseName, boolean isMathematical, Instructor instructor, Set<Student> students) {
+        this.id = courseId;
         this.courseName = courseName;
         this.isMathematical = isMathematical;
         this.instructor = instructor;
         this.students = students;
     }
 
-    public Instructor getInstructor() {
-        return instructor;
+    public Course(Long courseId, String courseName, boolean isMathematical) {
+        this.id = courseId;
+        this.courseName = courseName;
+        this.isMathematical = isMathematical;
+
     }
 
-    public void setInstructor(Instructor instructor) {
+    public Course(Long id, String courseName, boolean isMathematical, Instructor instructor) {
+        this.id = id;
+        this.courseName = courseName;
+        this.isMathematical = isMathematical;
         this.instructor = instructor;
-    }
-
-    public Course(int courseId, String courseName, boolean isMathematical, Set<Student> students) {
-        this.courseId = courseId;
-        this.courseName = courseName;
-        this.isMathematical = isMathematical;
-
-        this.students = students;
-    }
-
-    public Course(int courseId, String courseName, boolean isMathematical) {
-        this.courseId = courseId;
-        this.courseName = courseName;
-        this.isMathematical = isMathematical;
-
     }
 
     public Course() {
@@ -62,12 +57,12 @@ public class Course {
     }
 
 
-    public int getCourseId() {
-        return courseId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setId(Long courseId) {
+        this.id = courseId;
     }
 
     public String getCourseName() {
@@ -95,5 +90,12 @@ public class Course {
         this.students = students;
     }
 
+    public Instructor getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
+    }
 
 }

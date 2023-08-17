@@ -28,7 +28,7 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}")
-    public Course findById(@PathVariable (value = "courseId") int id){
+    public Course findById(@PathVariable (value = "courseId") Long id){
         return courseRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("course not found by id"));
     }
@@ -49,6 +49,21 @@ public class CourseController {
 
     }
 
+    @PutMapping("/update/{courseId}")
+    public Course updateCourse(@RequestBody Course course, @PathVariable(value = "courseId") Long id){
+        Course updatedCourse = courseRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("course not found by id"));
+        updatedCourse.setCourseName(course.getCourseName());
+        updatedCourse.setIsMathematical(course.isMathematical());
+        return courseRepository.save(updatedCourse);
+    }
+
+    @DeleteMapping("/delete/{courseId}")
+    public String deleteCourse(@PathVariable(value = "courseId") Long id){
+        courseRepository.deleteById(id);
+        return "course deletede";
+    }
+
     private void setExistingInstructorToCourse(Course course){
         Instructor instructor = instructorRepository.findById(course.getInstructor().getId()).orElse(null);
         if (instructor != null){
@@ -59,20 +74,5 @@ public class CourseController {
     private void saveNewInstructor(Course course){
         Instructor instructor = new Instructor(course.getInstructor().getInstructorName(),course.getInstructor().getInstructorSurname());
         course.setInstructor(instructorRepository.save(instructor));
-    }
-
-    @PutMapping("/update/{courseId}")
-    public Course updateCourse(@RequestBody Course course, @PathVariable(value = "courseId") int id){
-        Course updatedCourse = courseRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("course not found by id"));
-        updatedCourse.setCourseName(course.getCourseName());
-        updatedCourse.setIsMathematical(course.isMathematical());
-        return courseRepository.save(updatedCourse);
-    }
-
-    @DeleteMapping("/delete/{courseId}")
-    public String deleteCourse(@PathVariable(value = "courseId") int id){
-        courseRepository.deleteById(id);
-        return "course deletede";
     }
 }

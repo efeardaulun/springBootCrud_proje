@@ -1,59 +1,56 @@
 package com.example.efe.Entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 public class Student {
     @Id
     @GeneratedValue
-    private int studentId;
+    private Long id;
     private String studentFirstname;
     private String studentLastname;
     private String studentEmail;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "enrolledCourse",
     joinColumns = {
-            @JoinColumn(name = "student_id",referencedColumnName = "studentId")
+            @JoinColumn(name = "student_id",referencedColumnName = "id")
     },
     inverseJoinColumns = {
-            @JoinColumn(name = "course_id",referencedColumnName = "courseId")
+            @JoinColumn(name = "course_id",referencedColumnName = "id")
     }
     )
     private Set<Course> courses;
 
 
-    public Student(int studentId, String studentFirstname, String studentLastname, String studentEmail, Set<Course> courses) {
-        this.studentId = studentId;
+    public Student() {
+        super();
+    }
+
+    public Student(Long studentId, String studentFirstname, String studentLastname, String studentEmail, Set<Course> courses) {
+        this.id = studentId;
         this.studentFirstname = studentFirstname;
         this.studentLastname = studentLastname;
         this.studentEmail = studentEmail;
         this.courses = courses;
     }
 
-    public Student(int id, String firstname, String lastname, String email) {
-        this.studentId = id;
+    public Student(Long id, String firstname, String lastname, String email) {
+        this.id = id;
         this.studentFirstname = firstname;
         this.studentLastname = lastname;
         this.studentEmail = email;
-
     }
 
-    public Student() {
-        super();
+
+    public Long getId() {
+        return id;
     }
 
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int id) {
-        this.studentId = id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getStudentFirstname() {

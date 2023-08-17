@@ -13,19 +13,20 @@ public class Instructor {
     private String instructorName;
     private  String instructorSurname;
 
-
     /*
     @OneToMany(targetEntity = Course.class, cascade = CascadeType.ALL)
     @NonNull
     private List<Course> courseList = new ArrayList<>();
-
      */
 
     /*
     @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Course> courseList = new ArrayList<>();
-
      */
+
+    public Instructor() {
+        super();
+    }
 
     public Instructor(String instructorName, String instructorSurname) {
         this.instructorName = instructorName;
@@ -38,13 +39,7 @@ public class Instructor {
         this.instructorSurname = instructorSurname;
     }
 
-    public Instructor() {
-        super();
-    }
-
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
     public void setId(Long instructorId) {
         this.id = instructorId;
