@@ -6,12 +6,15 @@ import com.example.efe.Excepcition.ResourceNotFoundException;
 import com.example.efe.Repository.CourseRepository;
 import com.example.efe.Repository.StudentRepository;
 import com.example.efe.Response;
+import com.example.efe.Service.EmailSenderService;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.Format;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/student")
@@ -21,6 +24,8 @@ public class StudentController {
     StudentRepository studentRepository;
     @Autowired
     CourseRepository courseRepository;
+    @Autowired
+    EmailSenderService emailSenderService;
 
     //get all users
     @GetMapping()
@@ -41,7 +46,7 @@ public class StudentController {
         if (student != null && student.getCourses() != null) {
             for (Course course : student.getCourses()) {
                 if (course.getId() != null) {
-                    Hibernate.initialize(course);
+                    student.getCourses().remove(course);
                     student.getCourses().add(course);
                 }
             }

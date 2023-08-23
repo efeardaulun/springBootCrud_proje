@@ -1,11 +1,12 @@
 package com.example.efe.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Set;
 
-@Table(name = "Course")
 @Entity
 public class Course {
 
@@ -15,22 +16,24 @@ public class Course {
     private String courseName;
     private boolean isMathematical;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "instructorId", referencedColumnName = "id")
+    //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Instructor instructor;
 
-    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
-    private Set<Student> students;
+    @ManyToMany()
+    //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private List<Student> students;
 
 
-    public Course(Long courseId, String courseName, boolean isMathematical, Set<Student> students) {
+    public Course(Long courseId, String courseName, boolean isMathematical, List<Student> students) {
         this.id = courseId;
         this.courseName = courseName;
         this.isMathematical = isMathematical;
         this.students = students;
     }
 
-    public Course(Long courseId, String courseName, boolean isMathematical, Instructor instructor, Set<Student> students) {
+    public Course(Long courseId, String courseName, boolean isMathematical, Instructor instructor, List<Student> students) {
         this.id = courseId;
         this.courseName = courseName;
         this.isMathematical = isMathematical;
@@ -81,12 +84,11 @@ public class Course {
         this.isMathematical = isMathematical;
     }
 
-
-    public Set<Student> getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(Set<Student> students) {
+    public void setStudents(List<Student> students) {
         this.students = students;
     }
 

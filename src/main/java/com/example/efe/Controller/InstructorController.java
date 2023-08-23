@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//mail ekledim coursuna kayıt olunursa instructora mail gitsin
+//
 @RestController
 @RequestMapping("/instructor")
 public class InstructorController {
@@ -46,6 +48,7 @@ public class InstructorController {
                 .orElseThrow(()-> new ResourceNotFoundException("instructor not found by id"));
         updatedInstructor.setInstructorName(instructor.getInstructorName());
         updatedInstructor.setInstructorSurname(instructor.getInstructorSurname());
+        updatedInstructor.setEmail(instructor.getEmail());
         instructorRepository.save(updatedInstructor);
         return new Response("instrucor updated", HttpStatus.OK.value());
     }

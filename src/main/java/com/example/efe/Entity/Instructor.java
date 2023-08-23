@@ -3,7 +3,6 @@ package com.example.efe.Entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Instructor")
 public class Instructor {
     //id,name,surname
 
@@ -12,20 +11,17 @@ public class Instructor {
     private Long id;
     private String instructorName;
     private  String instructorSurname;
-
-    /*
-    @OneToMany(targetEntity = Course.class, cascade = CascadeType.ALL)
-    @NonNull
-    private List<Course> courseList = new ArrayList<>();
-     */
-
-    /*
-    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Course> courseList = new ArrayList<>();
-     */
+    private String email;
 
     public Instructor() {
         super();
+    }
+
+    public Instructor(Long id, String instructorName, String instructorSurname, String email) {
+        this.id = id;
+        this.instructorName = instructorName;
+        this.instructorSurname = instructorSurname;
+        this.email = email;
     }
 
     public Instructor(String instructorName, String instructorSurname) {
@@ -61,4 +57,11 @@ public class Instructor {
         this.instructorSurname = instructorSurname;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

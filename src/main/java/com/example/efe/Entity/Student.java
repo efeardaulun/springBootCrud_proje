@@ -1,8 +1,9 @@
 package com.example.efe.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class Student {
@@ -13,7 +14,7 @@ public class Student {
     private String studentLastname;
     private String studentEmail;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany()
     @JoinTable(name = "enrolledCourse",
     joinColumns = {
             @JoinColumn(name = "student_id",referencedColumnName = "id")
@@ -22,14 +23,15 @@ public class Student {
             @JoinColumn(name = "course_id",referencedColumnName = "id")
     }
     )
-    private Set<Course> courses;
+    //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private List<Course> courses;
 
 
     public Student() {
         super();
     }
 
-    public Student(Long studentId, String studentFirstname, String studentLastname, String studentEmail, Set<Course> courses) {
+    public Student(Long studentId, String studentFirstname, String studentLastname, String studentEmail, List<Course> courses) {
         this.id = studentId;
         this.studentFirstname = studentFirstname;
         this.studentLastname = studentLastname;
@@ -77,11 +79,11 @@ public class Student {
         this.studentEmail = email;
     }
 
-    public Set<Course> getCourses() {
+    public List<Course> getCourses() {
         return courses;
     }
 
-    public void setCourses(Set<Course> courses) {
+    public void setCourses(List<Course> courses) {
         this.courses = courses;
     }
 }
