@@ -27,7 +27,6 @@ public class StudentController {
     @Autowired
     EmailSenderService emailSenderService;
 
-    //get all users
     @GetMapping()
     public List <Student> getAllUsers(){
         return studentRepository.findAll();
@@ -37,39 +36,61 @@ public class StudentController {
     public Student findById(@PathVariable(value = "studentId") Long studentId){
         return studentRepository.findById(studentId)
                 .orElseThrow(()-> new ResourceNotFoundException("user not found by user id"));
-
     }
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
     public Response saveStudentWithCourses(@RequestBody Student student) {
-        if (student != null && student.getCourses() != null) {
+        if (student != null && student.getCourses() != null ) {
             for (Course course : student.getCourses()) {
                 if (course.getId() != null) {
-                    student.getCourses().remove(course);
+                    Hibernate.initialize(course);
                     student.getCourses().add(course);
+                    course = courseRepository.findById(course.getId()).orElse(null);
+                    String instructorEmail = course.getInstructor().getEmail();
+                    String formattedMessage = String.format("%s %s adlı öğrenci dersinize kaydolmuştur.", student.getStudentFirstname(), student.getStudentLastname());
+
+                    emailSenderService.sendEmail(instructorEmail,"Ders Kaydı",formattedMessage);
                 }
             }
-            Student savedStudent = studentRepository.save(student);
+            if (!student.getCourses().isEmpty()) {
+                student.getCourses().clear();
+            }
+            studentRepository.save(student);
             return new Response("created success", HttpStatus.CREATED.value());
         }
         else
-            return new Response("only enroll already existing course", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            studentRepository.save(student);
+            return new Response("student registered without courses", HttpStatus.CREATED.value());
     }
-
-
 
     @PutMapping("/update/{studentId}")
     @ResponseStatus(HttpStatus.OK)
     public Response updateStudent(@RequestBody Student user, @PathVariable(value = "studentId") Long studentId){
-        Student updatedUser = studentRepository.findById(studentId)
+        Student existingUser = studentRepository.findById(studentId)
                 .orElseThrow(()-> new ResourceNotFoundException("user not found by id"));
-        updatedUser.setStudentFirstname(user.getStudentFirstname());
-        updatedUser.setStudentLastname(user.getStudentLastname());
-        updatedUser.setStudentEmail(user.getStudentEmail());
-        updatedUser.setCourses(user.getCourses());
-        studentRepository.save(updatedUser);
-        return new Response("user updated",HttpStatus.OK.value());
+        existingUser.setStudentFirstname(user.getStudentFirstname());
+        existingUser.setStudentLastname(user.getStudentLastname());
+        existingUser.setStudentEmail(user.getStudentEmail());
+
+        Set<Course> newCourses = user.getCourses();
+        Set<Course> existingCourses = existingUser.getCourses();
+
+        for (Course newCourse : newCourses) {
+            newCourse = courseRepository.findById(newCourse.getId()).orElse(null);
+
+            if (newCourse != null && !existingCourses.contains(newCourse)) {
+                if (newCourse.getInstructor() != null) {
+                    String instructorEmail = newCourse.getInstructor().getEmail();
+                    emailSenderService.sendEmail(instructorEmail, "Yeni Öğrenci Kaydı", "Yeni bir öğrenci dersinize kaydoldu.");
+                }
+            }
+        }
+
+        existingUser.setCourses(newCourses);
+
+        studentRepository.save(existingUser);
+        return new Response("user updated", HttpStatus.OK.value());
     }
 
     @DeleteMapping("/delete/{studentId}")

@@ -23,17 +23,17 @@ public class Course {
 
     @ManyToMany()
     //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private List<Student> students;
+    private Set<Student> students;
 
 
-    public Course(Long courseId, String courseName, boolean isMathematical, List<Student> students) {
+    public Course(Long courseId, String courseName, boolean isMathematical, Set<Student> students) {
         this.id = courseId;
         this.courseName = courseName;
         this.isMathematical = isMathematical;
         this.students = students;
     }
 
-    public Course(Long courseId, String courseName, boolean isMathematical, Instructor instructor, List<Student> students) {
+    public Course(Long courseId, String courseName, boolean isMathematical, Instructor instructor, Set<Student> students) {
         this.id = courseId;
         this.courseName = courseName;
         this.isMathematical = isMathematical;
@@ -59,7 +59,6 @@ public class Course {
         super();
     }
 
-
     public Long getId() {
         return id;
     }
@@ -84,11 +83,11 @@ public class Course {
         this.isMathematical = isMathematical;
     }
 
-    public List<Student> getStudents() {
+    public Set<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(List<Student> students) {
+    public void setStudents(Set<Student> students) {
         this.students = students;
     }
 
