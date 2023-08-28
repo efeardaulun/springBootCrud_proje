@@ -1,8 +1,9 @@
 package com.example.efe.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -10,20 +11,27 @@ import java.util.Set;
 public class Student {
     @Id
     @GeneratedValue
-    private Long id;
+    private int studentId;
     private String studentFirstname;
     private String studentLastname;
     private String studentEmail;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "enrolledCourse",
     joinColumns = {
-            @JoinColumn(name = "student_id",referencedColumnName = "id")
+            @JoinColumn(name = "student_id",referencedColumnName = "studentId")
     },
     inverseJoinColumns = {
-            @JoinColumn(name = "course_id",referencedColumnName = "id")
+            @JoinColumn(name = "course_id",referencedColumnName = "courseId")
     }
     )
+<<<<<<< HEAD
+    private Set<Course> courses;
+
+
+    public Student(int studentId, String studentFirstname, String studentLastname, String studentEmail, Set<Course> courses) {
+        this.studentId = studentId;
+=======
     //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<Course> courses;
 
@@ -34,26 +42,31 @@ public class Student {
 
     public Student(Long studentId, String studentFirstname, String studentLastname, String studentEmail, Set<Course> courses) {
         this.id = studentId;
+>>>>>>> e06a8dd (endpoints are working, bugs fixed mail features added)
         this.studentFirstname = studentFirstname;
         this.studentLastname = studentLastname;
         this.studentEmail = studentEmail;
         this.courses = courses;
     }
 
-    public Student(Long id, String firstname, String lastname, String email) {
-        this.id = id;
+    public Student(int id, String firstname, String lastname, String email) {
+        this.studentId = id;
         this.studentFirstname = firstname;
         this.studentLastname = lastname;
         this.studentEmail = email;
+
     }
 
-
-    public Long getId() {
-        return id;
+    public Student() {
+        super();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(int id) {
+        this.studentId = id;
     }
 
     public String getStudentFirstname() {

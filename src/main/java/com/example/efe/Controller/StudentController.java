@@ -1,20 +1,12 @@
 package com.example.efe.Controller;
 
-import com.example.efe.Entity.Course;
 import com.example.efe.Entity.Student;
 import com.example.efe.Excepcition.ResourceNotFoundException;
-import com.example.efe.Repository.CourseRepository;
 import com.example.efe.Repository.StudentRepository;
-import com.example.efe.Response;
-import com.example.efe.Service.EmailSenderService;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.Format;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/student")
@@ -22,10 +14,6 @@ public class StudentController {
 
     @Autowired
     StudentRepository studentRepository;
-    @Autowired
-    CourseRepository courseRepository;
-    @Autowired
-    EmailSenderService emailSenderService;
 
     @GetMapping()
     public List <Student> getAllUsers(){
@@ -33,12 +21,26 @@ public class StudentController {
     }
 
     @GetMapping("/{studentId}")
-    public Student findById(@PathVariable(value = "studentId") Long studentId){
+    public Student findById(@PathVariable(value = "studentId") int studentId){
         return studentRepository.findById(studentId)
                 .orElseThrow(()-> new ResourceNotFoundException("user not found by user id"));
     }
-
     @PostMapping("/save")
+<<<<<<< HEAD
+    public Student saveStudent(@RequestBody Student studentId){
+        return studentRepository.save(studentId);
+    }
+
+    @PutMapping("/update/{studentId}")
+    public Student updateStudent(@RequestBody Student user, @PathVariable(value = "studentId") int studentId){
+        Student updatedUser = studentRepository.findById(studentId)
+                .orElseThrow(()-> new ResourceNotFoundException("user not found by id"));
+        updatedUser.setStudentFirstname(user.getStudentFirstname());
+        updatedUser.setStudentLastname(user.getStudentLastname());
+        updatedUser.setStudentEmail(user.getStudentEmail());
+        updatedUser.setCourses(user.getCourses());
+        return studentRepository.save(updatedUser);
+=======
     @ResponseStatus(HttpStatus.CREATED)
     public Response saveStudentWithCourses(@RequestBody Student student) {
         if (student != null && student.getCourses() != null ) {
@@ -91,14 +93,14 @@ public class StudentController {
 
         studentRepository.save(existingUser);
         return new Response("user updated", HttpStatus.OK.value());
+>>>>>>> e06a8dd (endpoints are working, bugs fixed mail features added)
     }
 
     @DeleteMapping("/delete/{studentId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Response deletedStudent(@PathVariable(value = "studentId") Long studentId){
+    public String deletedStudent(@PathVariable(value = "studentId") int studentId){
         Student deletedUser = studentRepository.findById(studentId)
                 .orElseThrow(()-> new ResourceNotFoundException("user not found by id"));
         studentRepository.delete(deletedUser);
-        return new Response("user deletede", HttpStatus.NO_CONTENT.value());
+        return "Users deleted";
     }
 }

@@ -1,26 +1,35 @@
 package com.example.efe.Entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Set;
 
+@Table(name = "Course")
 @Entity
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int courseId;
     private String courseName;
     private boolean isMathematical;
 
-    @ManyToOne()
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructorId", referencedColumnName = "id")
-    //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Instructor instructor;
 
+<<<<<<< HEAD
+
+
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
+    private Set<Student> students;
+
+
+    public Course(int courseId, String courseName, boolean isMathematical, Instructor instructor, Set<Student> students) {
+        this.courseId = courseId;
+=======
     @ManyToMany()
     //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<Student> students;
@@ -35,36 +44,52 @@ public class Course {
 
     public Course(Long courseId, String courseName, boolean isMathematical, Instructor instructor, Set<Student> students) {
         this.id = courseId;
+>>>>>>> e06a8dd (endpoints are working, bugs fixed mail features added)
         this.courseName = courseName;
         this.isMathematical = isMathematical;
         this.instructor = instructor;
         this.students = students;
     }
 
-    public Course(Long courseId, String courseName, boolean isMathematical) {
-        this.id = courseId;
-        this.courseName = courseName;
-        this.isMathematical = isMathematical;
-
+    public Instructor getInstructor() {
+        return instructor;
     }
 
-    public Course(Long id, String courseName, boolean isMathematical, Instructor instructor) {
-        this.id = id;
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
+    }
+
+    public Course(int courseId, String courseName, boolean isMathematical, Set<Student> students) {
+        this.courseId = courseId;
         this.courseName = courseName;
         this.isMathematical = isMathematical;
-        this.instructor = instructor;
+
+        this.students = students;
+    }
+
+    public Course(int courseId, String courseName, boolean isMathematical) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.isMathematical = isMathematical;
+
     }
 
     public Course() {
         super();
     }
 
+<<<<<<< HEAD
+
+    public int getCourseId() {
+        return courseId;
+=======
     public Long getId() {
         return id;
+>>>>>>> e06a8dd (endpoints are working, bugs fixed mail features added)
     }
 
-    public void setId(Long courseId) {
-        this.id = courseId;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     public String getCourseName() {
@@ -83,6 +108,10 @@ public class Course {
         this.isMathematical = isMathematical;
     }
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> e06a8dd (endpoints are working, bugs fixed mail features added)
     public Set<Student> getStudents() {
         return students;
     }
@@ -91,12 +120,5 @@ public class Course {
         this.students = students;
     }
 
-    public Instructor getInstructor() {
-        return instructor;
-    }
-
-    public void setInstructor(Instructor instructor) {
-        this.instructor = instructor;
-    }
 
 }

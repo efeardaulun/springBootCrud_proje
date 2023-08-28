@@ -1,8 +1,9 @@
 package com.example.efe.Entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "Instructor")
 public class Instructor {
     //id,name,surname
 
@@ -11,18 +12,20 @@ public class Instructor {
     private Long id;
     private String instructorName;
     private  String instructorSurname;
-    private String email;
 
-    public Instructor() {
-        super();
-    }
 
-    public Instructor(Long id, String instructorName, String instructorSurname, String email) {
-        this.id = id;
-        this.instructorName = instructorName;
-        this.instructorSurname = instructorSurname;
-        this.email = email;
-    }
+    /*
+    @OneToMany(targetEntity = Course.class, cascade = CascadeType.ALL)
+    @NonNull
+    private List<Course> courseList = new ArrayList<>();
+
+     */
+
+    /*
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Course> courseList = new ArrayList<>();
+
+     */
 
     public Instructor(String instructorName, String instructorSurname) {
         this.instructorName = instructorName;
@@ -35,7 +38,13 @@ public class Instructor {
         this.instructorSurname = instructorSurname;
     }
 
-    public Long getId() { return id; }
+    public Instructor() {
+        super();
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long instructorId) {
         this.id = instructorId;
@@ -57,11 +66,4 @@ public class Instructor {
         this.instructorSurname = instructorSurname;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
