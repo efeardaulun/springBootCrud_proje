@@ -1,10 +1,7 @@
 package com.example.efe.Entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
-
-import java.util.List;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
