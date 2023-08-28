@@ -1,6 +1,6 @@
 package com.example.efe.Entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 public class Instructor {
