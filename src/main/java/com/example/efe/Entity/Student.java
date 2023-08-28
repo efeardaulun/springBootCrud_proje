@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Student {
@@ -24,14 +25,14 @@ public class Student {
     }
     )
     //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private List<Course> courses;
+    private Set<Course> courses;
 
 
     public Student() {
         super();
     }
 
-    public Student(Long studentId, String studentFirstname, String studentLastname, String studentEmail, List<Course> courses) {
+    public Student(Long studentId, String studentFirstname, String studentLastname, String studentEmail, Set<Course> courses) {
         this.id = studentId;
         this.studentFirstname = studentFirstname;
         this.studentLastname = studentLastname;
@@ -79,11 +80,11 @@ public class Student {
         this.studentEmail = email;
     }
 
-    public List<Course> getCourses() {
+    public Set<Course> getCourses() {
         return courses;
     }
 
-    public void setCourses(List<Course> courses) {
+    public void setCourses(Set<Course> courses) {
         this.courses = courses;
     }
 }
